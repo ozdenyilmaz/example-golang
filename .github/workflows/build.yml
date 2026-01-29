@@ -1,0 +1,38 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Metadata about the workflow
+env:
+  GO_VERSION: '1.21'
+  APP_NAME: 'example-golang'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      
+      - name: Build
+        run: go build -v ./...
+      
+      - name: Test
+        run: go test -v ./...
+
+      # Example using secrets (you'll need to add these in GitHub repo settings)
+      # - name: Deploy
+      #   env:
+      #     API_KEY: ${{ secrets.API_KEY }}
+      #     DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+      #   run: |
+      #     echo "Deploying with secrets..."
